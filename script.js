@@ -20,52 +20,42 @@ function generateRandomNumber() {
 
 function playRound(playerSelection, computerSelection) {
   playerSelection = playerSelection.toLowerCase();
-  // input player and computer selection.
-  // if paper vs. rock, wins, log you win!
+
   let move = ['rock','paper','scissors'];
+
   if ( move.indexOf(playerSelection) === -1 ) {
-    console.log( "Invalid move. Please summon rock, paper, or scissors" )
+    return "Invalid move. Game reset. Please summon rock, paper, or scissors."
   }
   if ( playerSelection === computerSelection ) {
     return "Tie!"
   }
 
-  if ( playerSelection === 'rock' && computerSelection === 'paper' ) {
-    return "You lose! Paper beats rock"
-  }
+  let wins = {
+    'rock':'scissors',
+    'paper':'rock',
+    'scissors': 'paper'
+  };
 
-  if ( playerSelection === 'rock' && computerSelection === 'scissors' ) {
-    return "You win! Rock beats scissors"
-  }
-
-  if ( playerSelection === 'paper' && computerSelection === 'scissors' ) {
-    return "You lose! Scissors beats paper"
-  }
-
-  if ( playerSelection === 'paper' && computerSelection === 'rock' ) {
-    return "You win! Paper beats rock"
-  }
-
-  if ( playerSelection === 'scissors' && computerSelection === 'paper' ) {
-    return "You win! Scissors beats paper"
-  }
-
-  if ( playerSelection === 'scissors' && computerSelection === 'rock' ) {
-    return "You lose! Rock beats paper"
+  if ( wins[playerSelection] === computerSelection ) {
+    return `You win! ${playerSelection} beats ${computerSelection}`
+  } else {
+    return `You lose! ${computerSelection} beats ${playerSelection}`
   }
 
 }
-
-
-
 
 function game() {
   let playerScore = 0;
   let computerScore = 0;
 
-  for ( var i = 1; i <= 5; i++ ) {
-    var outcome = playRound(userInput(),computerPlay());
+  for ( let i = 1; i <= 5; i++ ) {
+    let outcome = playRound(userInput(),computerPlay());
     console.log(outcome)
+    if ( outcome.indexOf('Invalid') !== -1 ) {
+      i = 0;
+      playerScore = 0;
+      computerSelection = 0; // if there is an invalid input, starts the game over
+    }
     if ( outcome === "Tie!" ) {
       continue;
     } else if ( outcome.indexOf('win') !== -1 ) {
@@ -74,10 +64,9 @@ function game() {
     } else if ( outcome.indexOf('lose') !== -1 ) {
       computerScore+=1;
     }
-
   }
 
-  console.log(playerScore,computerScore);
+  console.log(`Your score: ${playerScore} | Computer score: ${computerScore}`)
 
   if (playerScore > computerScore) {
     return 'You won the game!';
@@ -85,7 +74,6 @@ function game() {
     return 'You lost the game!';
   }
 }
-
 
 console.log(game())
 
